@@ -1,58 +1,38 @@
 
-import usePagination from "../hooks/usePagination";
+import { useState } from "react";
+import useDebounce from "../hooks/useDebounce";
 
-function PaginationDemo() {
-  // Create 100 sample items
-  const items = Array.from({ length: 100 }, (_, index) => `Item ${index + 1}`);
+function DebounceSearchDemo() {
+  // Store what the user types
+  const [search, setSearch] = useState("");
 
-  // Use our pagination Hook
-  const {
-    currentPage,
-    totalPages,
-    startIndex,
-    endIndex,
-    itemsOnCurrentPage,
-    nextPage,
-    prevPage,
-    canNextPage,
-    canPrevPage,
-    setPage,
-  } = usePagination(items.length, 10);
-
-  // Get items for the current page
-  const currentItems = items.slice(startIndex, endIndex);
+  // Wait 500 milliseconds before updating
+  const debouncedValue = useDebounce(search, 500);
 
   return (
     <div>
-      <h2>Pagination Demo</h2>
+      <h2>Debounce Search Demo</h2>
 
-      <p>Current Page: {currentPage} of {totalPages}</p>
+      <input
+        type="text"
+        placeholder="Type to search..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
-      {currentItems.map((item) => (
-        <p key={item}>{item}</p>
-      ))}
+      <p>Current Input: {search}</p>
 
-      <button onClick={prevPage} disabled={!canPrevPage}>
-        Previous
-      </button>
+      <p>Debounced Value: {debouncedValue}</p>
 
-      <button onClick={nextPage} disabled={!canNextPage}>
-        Next
-      </button>
+      <h3>Simulated Search Results:</h3>
 
-      <p>
-        Showing {itemsOnCurrentPage} items on this page.
-      </p>
-
-      <div>
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button key={index} onClick={() => setPage(index + 1)}>
-            {index + 1}
-          </button>
-        ))}
-      </div>
+      {debouncedValue ? (
+        <p>Searching for: {debouncedValue}</p>
+      ) : (
+        <p>Type to see results.</p>
+      )}
     </div>
   );
 }
 
-export default PaginationDemo;
+export default DebounceSearchDemo;
