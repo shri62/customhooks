@@ -1,4 +1,4 @@
-```jsx
+
 import usePagination from "../hooks/usePagination";
 
 function PaginationDemo() {
@@ -56,4 +56,3 @@ function PaginationDemo() {
 }
 
 export default PaginationDemo;
-```
